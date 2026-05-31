@@ -62,6 +62,12 @@ export function startBot() {
     );
   });
 
+  bot.onText(/\/chatid/, (msg) => {
+    const chatId = msg.chat.id;
+    const title = msg.chat.title ?? msg.chat.username ?? "цей чат";
+    bot.sendMessage(chatId, `ID каналу «${title}»:\n<code>${chatId}</code>`, { parse_mode: "HTML" });
+  });
+
   bot.on("callback_query", (query) => {
     const chatId = query.message?.chat.id;
     if (!chatId) return;
