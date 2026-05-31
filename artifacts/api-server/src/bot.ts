@@ -116,7 +116,11 @@ export function startBot() {
     bot.sendMessage(
       chatId,
       `Звіт відправлено, дякуємо🤍\n\nВаші посилання для тарифу ${tariffName}:\n\n${linksText}`
-    );
+    ).then((sent) => {
+      setTimeout(() => {
+        bot.deleteMessage(chatId, sent.message_id).catch(() => {});
+      }, 5 * 60 * 1000);
+    });
   });
 
   bot.on("polling_error", (err) => {
