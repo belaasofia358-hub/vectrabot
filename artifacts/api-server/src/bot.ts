@@ -6,23 +6,23 @@ if (!token) {
   throw new Error("TELEGRAM_BOT_TOKEN is required but was not provided.");
 }
 
-const STANDARD_LINKS = [
-  { name: "заробіток на завданнях👇", url: "https://t.me/+frma8U34CSEwYjYy" },
-  { name: "чат взаємодопомоги👇", url: "https://t.me/+5vpSc3qIvHg3NDcy" },
-  { name: "відео-туторіали👇", url: "https://t.me/+4jifbA6s241hYTc6" },
-  { name: "відгуки👇", url: "https://t.me/+pia9L0QSkj5jMGNi" },
+const STANDARD_CHANNELS = [
+  { name: "заробіток на завданнях👇", id: -1003784403188 },
+  { name: "чат взаємодопомоги👇",     id: -1003945914469 },
+  { name: "відео-туторіали👇",         id: -1003985047416 },
+  { name: "відгуки👇",                 id: -1003921025455 },
 ];
 
-const PREMIUM_LINKS = [
-  { name: "навчання кураторству👇", url: "https://t.me/+WqEAsQvW_lYxMjAy" },
-  { name: "продаж у тік ток👇", url: "https://t.me/+8y4We7nhFL4xZWRi" },
-  { name: "продаж у інстаграм👇", url: "https://t.me/+7sEp_jENkDIxZjcy" },
-  { name: "досягення👇", url: "https://t.me/+uPMLWjsXK8A3YzI6" },
-  { name: "піар👇", url: "https://t.me/+T4DE_oUbwY9jMTJi" },
-  { name: "відгуки👇", url: "https://t.me/+pia9L0QSkj5jMGNi" },
-  { name: "відео-туторіали👇", url: "https://t.me/+4jifbA6s241hYTc6" },
-  { name: "чат взаємодопомоги👇", url: "https://t.me/+5vpSc3qIvHg3NDcy" },
-  { name: "заробіток на завданнях👇", url: "https://t.me/+frma8U34CSEwYjYy" },
+const PREMIUM_CHANNELS = [
+  { name: "заробіток на завданнях👇", id: -1003784403188 },
+  { name: "чат взаємодопомоги👇",     id: -1003945914469 },
+  { name: "відео-туторіали👇",         id: -1003985047416 },
+  { name: "відгуки👇",                 id: -1003921025455 },
+  { name: "навчання кураторству👇",    id: -1003891371444 },
+  { name: "продаж у тік ток👇",        id: -1003981697155 },
+  { name: "продаж у інстаграм👇",      id: -1004293443484 },
+  { name: "досягення👇",               id: -1003724183247 },
+  { name: "піар👇",                    id: -1003967628563 },
 ];
 
 type UserState = "awaiting_tariff" | "awaiting_report";
@@ -36,6 +36,29 @@ interface UserSession {
 const ADMIN_ID = 6003178436;
 
 const sessions = new Map<number, UserSession>();
+
+async function generateInviteLinks(
+  bot: TelegramBot,
+  channels: { name: string; id: number }[]
+): Promise<{ name: string; url: string }[]> {
+  const expireDate = Math.floor(Date.now() / 1000) + 5 * 60;
+  const results: { name: string; url: string }[] = [];
+
+  for (const ch of channels) {
+    try {
+      const link = await (bot as any).createChatInviteLink(ch.id, {
+        expire_date: expireDate,
+        member_limit: 1,
+      });
+      results.push({ name: ch.name, url: link.invite_link });
+    } catch (err: any) {
+      logger.error({ err, channelId: ch.id }, "Failed to create invite link");
+      results.push({ name: ch.name, url: "❌ помилка (бот не адмін?)" });
+    }
+  }
+
+  return results;
+}
 
 export function startBot() {
   const bot = new TelegramBot(token, { polling: true });
@@ -104,10 +127,8 @@ export function startBot() {
 
     if (!tariff) return;
 
-    const links = tariff === "premium" ? PREMIUM_LINKS : STANDARD_LINKS;
+    const channels = tariff === "premium" ? PREMIUM_CHANNELS : STANDARD_CHANNELS;
     const tariffName = tariff === "premium" ? "PREMIUM" : "STANDARD";
-
-    const linksText = links.map((l) => `${l.name}\n${l.url}`).join("\n\n");
 
     const senderName = msg.from?.username
       ? `@${msg.from.username}`
@@ -119,13 +140,21 @@ export function startBot() {
       `📋 Новий звіт від ${senderName}\nТариф: ${tariffName}`
     );
 
-    bot.sendMessage(
-      chatId,
-      `Звіт відправлено, дякуємо🤍\n\nВаші посилання для тарифу ${tariffName}:\n\n${linksText}`
-    ).then((sent) => {
-      setTimeout(() => {
-        bot.deleteMessage(chatId, sent.message_id).catch(() => {});
-      }, 5 * 60 * 1000);
+    bot.sendMessage(chatId, "Звіт відправлено, дякуємо🤍\n\nГенерую ваші одноразові посилання...").then(() => {
+      generateInviteLinks(bot, channels).then((links) => {
+        const linksText = links.map((l) => `${l.name}\n${l.url}`).join("\n\n");
+
+        bot
+          .sendMessage(
+            chatId,
+            `Ваші посилання для тарифу ${tariffName}:\n\n${linksText}\n\n⚠️ Посилання одноразові і діють 5 хвилин`
+          )
+          .then((sent) => {
+            setTimeout(() => {
+              bot.deleteMessage(chatId, sent.message_id).catch(() => {});
+            }, 5 * 60 * 1000);
+          });
+      });
     });
   });
 
