@@ -84555,6 +84555,12 @@ function startBot() {
       }
     );
   });
+  bot.onText(/\/chatid/, (msg) => {
+    const chatId = msg.chat.id;
+    const title = msg.chat.title ?? msg.chat.username ?? "\u0446\u0435\u0439 \u0447\u0430\u0442";
+    bot.sendMessage(chatId, `ID \u043A\u0430\u043D\u0430\u043B\u0443 \xAB${title}\xBB:
+<code>${chatId}</code>`, { parse_mode: "HTML" });
+  });
   bot.on("callback_query", (query) => {
     const chatId = query.message?.chat.id;
     if (!chatId) return;
