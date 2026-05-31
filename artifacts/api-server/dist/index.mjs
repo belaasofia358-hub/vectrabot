@@ -84515,25 +84515,42 @@ var token = process.env["TELEGRAM_BOT_TOKEN"];
 if (!token) {
   throw new Error("TELEGRAM_BOT_TOKEN is required but was not provided.");
 }
-var STANDARD_LINKS = [
-  { name: "\u0437\u0430\u0440\u043E\u0431\u0456\u0442\u043E\u043A \u043D\u0430 \u0437\u0430\u0432\u0434\u0430\u043D\u043D\u044F\u0445\u{1F447}", url: "https://t.me/+frma8U34CSEwYjYy" },
-  { name: "\u0447\u0430\u0442 \u0432\u0437\u0430\u0454\u043C\u043E\u0434\u043E\u043F\u043E\u043C\u043E\u0433\u0438\u{1F447}", url: "https://t.me/+5vpSc3qIvHg3NDcy" },
-  { name: "\u0432\u0456\u0434\u0435\u043E-\u0442\u0443\u0442\u043E\u0440\u0456\u0430\u043B\u0438\u{1F447}", url: "https://t.me/+4jifbA6s241hYTc6" },
-  { name: "\u0432\u0456\u0434\u0433\u0443\u043A\u0438\u{1F447}", url: "https://t.me/+pia9L0QSkj5jMGNi" }
+var STANDARD_CHANNELS = [
+  { name: "\u0437\u0430\u0440\u043E\u0431\u0456\u0442\u043E\u043A \u043D\u0430 \u0437\u0430\u0432\u0434\u0430\u043D\u043D\u044F\u0445\u{1F447}", id: -1003784403188 },
+  { name: "\u0447\u0430\u0442 \u0432\u0437\u0430\u0454\u043C\u043E\u0434\u043E\u043F\u043E\u043C\u043E\u0433\u0438\u{1F447}", id: -1003945914469 },
+  { name: "\u0432\u0456\u0434\u0435\u043E-\u0442\u0443\u0442\u043E\u0440\u0456\u0430\u043B\u0438\u{1F447}", id: -1003985047416 },
+  { name: "\u0432\u0456\u0434\u0433\u0443\u043A\u0438\u{1F447}", id: -1003921025455 }
 ];
-var PREMIUM_LINKS = [
-  { name: "\u043D\u0430\u0432\u0447\u0430\u043D\u043D\u044F \u043A\u0443\u0440\u0430\u0442\u043E\u0440\u0441\u0442\u0432\u0443\u{1F447}", url: "https://t.me/+WqEAsQvW_lYxMjAy" },
-  { name: "\u043F\u0440\u043E\u0434\u0430\u0436 \u0443 \u0442\u0456\u043A \u0442\u043E\u043A\u{1F447}", url: "https://t.me/+8y4We7nhFL4xZWRi" },
-  { name: "\u043F\u0440\u043E\u0434\u0430\u0436 \u0443 \u0456\u043D\u0441\u0442\u0430\u0433\u0440\u0430\u043C\u{1F447}", url: "https://t.me/+7sEp_jENkDIxZjcy" },
-  { name: "\u0434\u043E\u0441\u044F\u0433\u0435\u043D\u043D\u044F\u{1F447}", url: "https://t.me/+uPMLWjsXK8A3YzI6" },
-  { name: "\u043F\u0456\u0430\u0440\u{1F447}", url: "https://t.me/+T4DE_oUbwY9jMTJi" },
-  { name: "\u0432\u0456\u0434\u0433\u0443\u043A\u0438\u{1F447}", url: "https://t.me/+pia9L0QSkj5jMGNi" },
-  { name: "\u0432\u0456\u0434\u0435\u043E-\u0442\u0443\u0442\u043E\u0440\u0456\u0430\u043B\u0438\u{1F447}", url: "https://t.me/+4jifbA6s241hYTc6" },
-  { name: "\u0447\u0430\u0442 \u0432\u0437\u0430\u0454\u043C\u043E\u0434\u043E\u043F\u043E\u043C\u043E\u0433\u0438\u{1F447}", url: "https://t.me/+5vpSc3qIvHg3NDcy" },
-  { name: "\u0437\u0430\u0440\u043E\u0431\u0456\u0442\u043E\u043A \u043D\u0430 \u0437\u0430\u0432\u0434\u0430\u043D\u043D\u044F\u0445\u{1F447}", url: "https://t.me/+frma8U34CSEwYjYy" }
+var PREMIUM_CHANNELS = [
+  { name: "\u0437\u0430\u0440\u043E\u0431\u0456\u0442\u043E\u043A \u043D\u0430 \u0437\u0430\u0432\u0434\u0430\u043D\u043D\u044F\u0445\u{1F447}", id: -1003784403188 },
+  { name: "\u0447\u0430\u0442 \u0432\u0437\u0430\u0454\u043C\u043E\u0434\u043E\u043F\u043E\u043C\u043E\u0433\u0438\u{1F447}", id: -1003945914469 },
+  { name: "\u0432\u0456\u0434\u0435\u043E-\u0442\u0443\u0442\u043E\u0440\u0456\u0430\u043B\u0438\u{1F447}", id: -1003985047416 },
+  { name: "\u0432\u0456\u0434\u0433\u0443\u043A\u0438\u{1F447}", id: -1003921025455 },
+  { name: "\u043D\u0430\u0432\u0447\u0430\u043D\u043D\u044F \u043A\u0443\u0440\u0430\u0442\u043E\u0440\u0441\u0442\u0432\u0443\u{1F447}", id: -1003891371444 },
+  { name: "\u043F\u0440\u043E\u0434\u0430\u0436 \u0443 \u0442\u0456\u043A \u0442\u043E\u043A\u{1F447}", id: -1003981697155 },
+  { name: "\u043F\u0440\u043E\u0434\u0430\u0436 \u0443 \u0456\u043D\u0441\u0442\u0430\u0433\u0440\u0430\u043C\u{1F447}", id: -1004293443484 },
+  { name: "\u0434\u043E\u0441\u044F\u0433\u0435\u043D\u043D\u044F\u{1F447}", id: -1003724183247 },
+  { name: "\u043F\u0456\u0430\u0440\u{1F447}", id: -1003967628563 }
 ];
 var ADMIN_ID = 6003178436;
 var sessions = /* @__PURE__ */ new Map();
+async function generateInviteLinks(bot, channels) {
+  const expireDate = Math.floor(Date.now() / 1e3) + 5 * 60;
+  const results = [];
+  for (const ch of channels) {
+    try {
+      const link = await bot.createChatInviteLink(ch.id, {
+        expire_date: expireDate,
+        member_limit: 1
+      });
+      results.push({ name: ch.name, url: link.invite_link });
+    } catch (err) {
+      logger.error({ err, channelId: ch.id }, "Failed to create invite link");
+      results.push({ name: ch.name, url: "\u274C \u043F\u043E\u043C\u0438\u043B\u043A\u0430 (\u0431\u043E\u0442 \u043D\u0435 \u0430\u0434\u043C\u0456\u043D?)" });
+    }
+  }
+  return results;
+}
 function startBot() {
   const bot = new import_node_telegram_bot_api.default(token, { polling: true });
   logger.info("Telegram bot started (polling)");
@@ -84592,10 +84609,8 @@ function startBot() {
     const tariff = session.tariff;
     sessions.delete(chatId);
     if (!tariff) return;
-    const links = tariff === "premium" ? PREMIUM_LINKS : STANDARD_LINKS;
+    const channels = tariff === "premium" ? PREMIUM_CHANNELS : STANDARD_CHANNELS;
     const tariffName = tariff === "premium" ? "PREMIUM" : "STANDARD";
-    const linksText = links.map((l) => `${l.name}
-${l.url}`).join("\n\n");
     const senderName = msg.from?.username ? `@${msg.from.username}` : msg.from?.first_name ?? "\u041D\u0435\u0432\u0456\u0434\u043E\u043C\u0438\u0439";
     bot.forwardMessage(ADMIN_ID, chatId, msg.message_id);
     bot.sendMessage(
@@ -84603,18 +84618,24 @@ ${l.url}`).join("\n\n");
       `\u{1F4CB} \u041D\u043E\u0432\u0438\u0439 \u0437\u0432\u0456\u0442 \u0432\u0456\u0434 ${senderName}
 \u0422\u0430\u0440\u0438\u0444: ${tariffName}`
     );
-    bot.sendMessage(
-      chatId,
-      `\u0417\u0432\u0456\u0442 \u0432\u0456\u0434\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u043E, \u0434\u044F\u043A\u0443\u0454\u043C\u043E\u{1F90D}
+    bot.sendMessage(chatId, "\u0417\u0432\u0456\u0442 \u0432\u0456\u0434\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u043E, \u0434\u044F\u043A\u0443\u0454\u043C\u043E\u{1F90D}\n\n\u0413\u0435\u043D\u0435\u0440\u0443\u044E \u0432\u0430\u0448\u0456 \u043E\u0434\u043D\u043E\u0440\u0430\u0437\u043E\u0432\u0456 \u043F\u043E\u0441\u0438\u043B\u0430\u043D\u043D\u044F...").then(() => {
+      generateInviteLinks(bot, channels).then((links) => {
+        const linksText = links.map((l) => `${l.name}
+${l.url}`).join("\n\n");
+        bot.sendMessage(
+          chatId,
+          `\u0412\u0430\u0448\u0456 \u043F\u043E\u0441\u0438\u043B\u0430\u043D\u043D\u044F \u0434\u043B\u044F \u0442\u0430\u0440\u0438\u0444\u0443 ${tariffName}:
 
-\u0412\u0430\u0448\u0456 \u043F\u043E\u0441\u0438\u043B\u0430\u043D\u043D\u044F \u0434\u043B\u044F \u0442\u0430\u0440\u0438\u0444\u0443 ${tariffName}:
+${linksText}
 
-${linksText}`
-    ).then((sent) => {
-      setTimeout(() => {
-        bot.deleteMessage(chatId, sent.message_id).catch(() => {
+\u26A0\uFE0F \u041F\u043E\u0441\u0438\u043B\u0430\u043D\u043D\u044F \u043E\u0434\u043D\u043E\u0440\u0430\u0437\u043E\u0432\u0456 \u0456 \u0434\u0456\u044E\u0442\u044C 5 \u0445\u0432\u0438\u043B\u0438\u043D`
+        ).then((sent) => {
+          setTimeout(() => {
+            bot.deleteMessage(chatId, sent.message_id).catch(() => {
+            });
+          }, 5 * 60 * 1e3);
         });
-      }, 5 * 60 * 1e3);
+      });
     });
   });
   bot.on("polling_error", (err) => {
