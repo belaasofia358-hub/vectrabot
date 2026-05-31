@@ -84604,7 +84604,12 @@ ${l.url}`).join("\n\n");
 \u0412\u0430\u0448\u0456 \u043F\u043E\u0441\u0438\u043B\u0430\u043D\u043D\u044F \u0434\u043B\u044F \u0442\u0430\u0440\u0438\u0444\u0443 ${tariffName}:
 
 ${linksText}`
-    );
+    ).then((sent) => {
+      setTimeout(() => {
+        bot.deleteMessage(chatId, sent.message_id).catch(() => {
+        });
+      }, 5 * 60 * 1e3);
+    });
   });
   bot.on("polling_error", (err) => {
     logger.error({ err }, "Telegram polling error");
